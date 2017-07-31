@@ -1,0 +1,44 @@
+/*弹框样式*/
+.ebs-add-goods {
+    height: 580px;
+    min-height: 580px;
+}
+
+.ebs-add-goods .next-dialog-header {
+    font-size: 18px;
+}
+
+.ebs-add-goods .next-dialog-body {
+    padding-bottom: 0;
+}
+
+.ebs-add-goods .next-dialog-footer > span {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+
+/*表格样式*/
+
+.add-goods-table .next-table-fixed {
+    border: none;
+}
+
+.add-goods-table .next-table-body {
+    font-size: 12px;
+}
+
+.add-goods-table .next-table-header {
+    font-size: 12px;
+}
+
+.add-goods-table .next-table-body tbody {
+    border: none;
+    cursor: pointer;
+}
+
+.add-goods-text-overflow .next-table-cell-wrapper{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

@@ -1,0 +1,233 @@
+.navigation_min {
+    /*width: 100px;
+    padding: 10px 5px 10px 30px;*/
+    max-width: 62px;
+    min-width: 62px;
+    height: 100%;
+    transition-delay: 0ms;
+    transition-duration: 500ms;
+}
+
+.navigation_max {
+    transition-delay: 0ms;  /*开始过渡之前的延时*/
+    transition-duration: 500ms; /*css过渡的持续时间*/
+    transition-property: max-width,min-width,height;   /*指定应用过渡的属性*/
+    max-width: 150px;
+    min-width: 150px;
+    /*padding-right: 5px;*/
+    height: 100%;
+
+    /*不换行*/
+    white-space: nowrap;
+    word-break: keep-all;
+    display: block;
+    overflow: hidden;
+}
+.navigation_min .next-navigation-tree .next-navigation-item, .navigation_max .next-navigation-tree .next-navigation-item{
+    background-color: #fff;
+}
+.navigation_min .next-navigation-item-children .next-navigation-item-text {
+    margin-left: -20px;
+    white-space: nowrap;
+    word-break: keep-all;
+    display: block;
+    overflow: hidden;
+}
+
+.show_min{
+    display: none;
+}
+.show_max{
+    display: inline;
+}
+
+
+#container {
+    background-color: #F3F3F3;
+    display: flex;
+    min-width: 960px;
+    width: 100%;
+    height: 100%;
+}
+#module_data {
+    width: 100%;
+    overflow: auto;
+    height:100%;
+    overflow:hidden;
+    border-left: 1px solid #f7f5f5;
+    /*padding: 10px 10px 10px 5px;*/
+}
+#initSet {
+    min-height:100%;
+    height:100%;
+    overflow:hidden;
+    padding:10px 20px;
+    background-color:white;
+    /*border: "1px solid #EBEBEB";
+    border-radius: "5px";*/
+}
+.excep-buttons{
+    position: fixed;
+    z-index: 999;
+}
+.btrigger{
+    border: none;
+    padding: 0;
+    display: inline-block;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.btrigger_400{
+    border: none;
+    padding: 0;
+    display: inline-block;
+    max-width: 400px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.btrigger_80 {
+    border: none;
+    padding: 0;
+    display: inline-block;
+    max-width: 80px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.next-table td .next-table-cell-wrapper {
+    padding: 8px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+.next-table th .next-table-cell-wrapper {
+    padding: 8px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.nav_link , .nav_link_unlink{
+    background: white;
+    border-right: none;
+    overflow: hidden;
+}
+
+
+.nav_link_active{
+    background: #f7f8fa;
+    border-right: 2.5px solid #3089DC;
+}
+/*.next-icon-goods:before {
+    background-image:url("assets/goods.png");
+}*/
+.nav_link:hover {
+    background: #f7f8fa;
+    border-right: none;
+}
+
+.next-navigation-item-children .next-navigation-item-content{
+    padding-left: 20px
+}
+.next-navigation-tree .next-navigation-item-custom-icon-ay-max:before{
+    font-size: 14px;
+    line-height: 12px;
+    padding: 0 3px;
+    transition-delay: 0ms;  /*开始过渡之前的延时*/
+    transition-duration: 500ms; /*css过渡的持续时间*/
+    transition-property: font-size;   /*指定应用过渡的属性*/
+}
+
+.next-navigation-tree .next-navigation-item-custom-icon-ay-min:before{
+    padding: 0 3px;
+    font-size: 20px;
+    line-height: 12px;
+    transition-delay: 0ms;  /*开始过渡之前的延时*/
+    transition-duration: 500ms; /*css过渡的持续时间*/
+    transition-property: font-size;   /*指定应用过渡的属性*/
+}
+
+.order-details-div{
+    margin-top: 6px;
+    margin-left:9px;
+}
+.order-details-div-name{
+    margin-left:-2px;
+    color: #c0c0c0;
+    width: 60px;
+    display: inline-block;
+    text-align: right;
+}
+
+.order-details-table{
+    width: 1400px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.order-details-table-a{
+    color:#6DB5E5;
+    margin-right: 10px;
+}
+.div-table-class table{
+    margin-top: -1px
+}
+
+.order-icon-copy{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-bottom:-2px;
+    overflow: hidden;
+    background: url(https://cdn.zzgdapp.com/trade/web/images/navicon20160519.png) no-repeat -48px 1px;
+}
+
+/*.next-tabs-strip>.next-tabs-bar .next-tabs-nav-container .next-tabs-nav-wrap .next-tabs-nav-scroll .next-tabs-nav .next-tabs-tab.next-tabs-tab-active{
+    border-bottom: 2px solid #3089dc;
+}*/
+
+.next-tabs{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.next-tabs-bar{
+    flex: none;
+}
+.next-tabs-content{
+    height: 100%;
+    flex: auto;
+    display: flex;
+    font-size: 12px;
+}
+
+.print-modal-table{
+    margin-top: 20px;
+    height: 100%;
+    padding-bottom: 80px;
+}
+
+.print-modal-span{
+    margin: 0 10px;
+}
+
+.print-modal-image{
+    width: 337px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+.next-select .next-comobobox-arrow-wrapper{
+    background: #ffffff;
+    border-left: 0px;
+}
+
+.next-tabs-tabpane{
+    height: 96%;
+    width: 100%;
+    margin-top: -5px;
+}
