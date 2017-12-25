@@ -33,7 +33,7 @@
 
 + 简化了store的创建,
 
-	 一个应用只有一个store,create封装了store的注册,也就是我们所说的reducer函数,
+	 一个应用只有一个store,createStore封装了store的注册,也就是我们所说的reducer函数,
 	 这个reducer函数要传入action和state,state的副本通过与原来的值的对比判断是否广播,一个state对应了一个view
 	 reducer用来更新视图,action是触发某一个动作的回调用来更新store的值	
 
