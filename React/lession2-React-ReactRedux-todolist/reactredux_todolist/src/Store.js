@@ -5,22 +5,11 @@ import {reducer as filterReducer} from './filter';
 
 import Perf from 'react-addons-perf'
 
-const win = window;
-win.Perf = Perf
-
+/*createStore只能接受一个reducer,所以使用这*/
 const reducer = combineReducers({
   todos: todoReducer,
   filter: filterReducer
 });
 
-const middlewares = [];
-if (process.env.NODE_ENV !== 'production') {
-  middlewares.push(require('redux-immutable-state-invariant')());
-}
 
-const storeEnhancers = compose(
-  applyMiddleware(...middlewares),
-  (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
-);
-
-export default createStore(reducer, {}, storeEnhancers);
+export default createStore(reducer, {});
