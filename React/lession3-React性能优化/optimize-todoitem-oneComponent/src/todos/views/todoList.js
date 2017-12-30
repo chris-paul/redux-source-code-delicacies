@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import TodoItem from './todoItem.js';
+import Test from './test.js'
 import {FilterTypes} from '../../constants.js';
 
 const TodoList = ({todos, onClickTodo}) => {
