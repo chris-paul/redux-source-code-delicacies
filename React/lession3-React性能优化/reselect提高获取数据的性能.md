@@ -1,5 +1,5 @@
 ### react是数据驱动DOM,所以除了优化渲染过程还需要优化数据的获取过程
-    + 下面是我们根据state筛选不同状态的todoitem,每一次都重新遍历去取数据,如果todos和filter字段都没有变化,实在没有必要去重新取一次数据
++ 下面是我们根据state筛选不同状态的todoitem,每一次都重新遍历去取数据,如果todos和filter字段都没有变化,实在没有必要去重新取一次数据
 ```javascript
 const selectVisibleTodos = (todos, filter) => {
   switch (filter) {
