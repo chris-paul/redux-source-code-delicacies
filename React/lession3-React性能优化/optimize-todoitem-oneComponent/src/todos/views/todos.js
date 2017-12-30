@@ -8,7 +8,7 @@ export default () => {
   return (
     <div className="todos">
       <AddTodo />
-      <TodoList test={"111"}/>
+      <TodoList />
     </div>
   );
 }
