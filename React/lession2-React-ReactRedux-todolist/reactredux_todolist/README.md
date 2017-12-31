@@ -77,24 +77,25 @@ const reducer = combineReducers({
   + 首先下载google插件reactperf,截至目前react的最新版是16,但是reactPerf最多支持15,所以我们降低了react的版本
   
    cnpm install react-addons-perf
-  
+
   + react-addons-perf     
+  ```javascript
+  import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+  import {reducer as todoReducer} from './todos';
+  import {reducer as filterReducer} from './filter';
+   import Perf from 'react-addons-perf';
+   const win = window;
+   win.Perf = Perf
+   const reducer = combineReducers({
+     todos: todoReducer,
+     filter: filterReducer
+   });
 
-      import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
-      import {reducer as todoReducer} from './todos';
-      import {reducer as filterReducer} from './filter';
-      import Perf from 'react-addons-perf';
-      const win = window;
-      win.Perf = Perf
-      const reducer = combineReducers({
-        todos: todoReducer,
-        filter: filterReducer
-      });
+   const middlewares = [];
+   const storeEnhancers = compose(
+     applyMiddleware(...middlewares),
+     (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
+   );
 
-      const middlewares = [];
-      const storeEnhancers = compose(
-        applyMiddleware(...middlewares),
-        (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
-      );
-
-      export default createStore(reducer, {}, storeEnhancers);
+   export default createStore(reducer, {}, storeEnhancers);
+  ```

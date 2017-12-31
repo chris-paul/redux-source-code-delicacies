@@ -162,3 +162,83 @@ let createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
 import thunk from 'redux-thunk'
 let createStoreWithMiddleware = createStore(reducer,preState,applyMiddleware(thunk))
 ``` 
+### 实现自己的中间件和store Enhancer
+
+#### 类似于thunk,我们实现promise中间件解决react的异步问题
+```javascript
+/**
+ * 通过是否有promise.then方法判断是否为promise对象
+ * @param  {[type]}  obj [description]
+ * @return {Boolean}     [description]
+ */
+function isPromise(obj) {
+  return obj && typeof obj.then === 'function';
+}
+
+export default function promiseMiddleware({dispatch}) {
+  return (next) => (action) => {
+    const {types, promise, ...rest} = action;
+    if (!isPromise(promise) || !(action.types && action.types.length === 3)) {
+      return next(action);
+    }
+  //分别代表promise处于不同的status时候,对应的action类型
+    const [PENDING, DONE, FAIL] = types;
+
+    dispatch({...rest, type: PENDING});
+    //发送请求
+    return action.promise.then(
+      (result) => dispatch({...rest, result, type: DONE}),
+      (error) => dispatch({...rest, error, type: FAIL})
+    );
+  };
+}
+```
+#### 使用方式
+```javascript
+export const fetchWeather = (cityCode) => {
+  const apiUrl = `/data/cityinfo/${cityCode}.html`;
+
+  return {
+    promise: fetch(apiUrl).then(response => {
+      if (response.status !== 200) {
+        throw new Error('Fail to get response with status ' + response.status);
+      }
+      return response.json().then(responseJson => responseJson.weatherinfo);
+    }),
+    types: [FETCH_STARTED, FETCH_SUCCESS, FETCH_FAILURE]
+  };
+
+}
+```
+
+#### 实现自己的store增强器(就是返回加强版本的createStore)，这个例子主要是在store对象不改变的情况下,改变store的reducer和state
+```javascript
+const RESET_ACTION_TYPE = '@@RESET';
+const resetReducerCreator = (reducer, resetState) => (state, action) => {
+  if (action.type === RESET_ACTION_TYPE) {
+    return action.state;
+  } else {
+    return reducer(state, action);
+  }
+};
+
+const reset = (createStore) => (reducer, preloadedState, enhancer) => {
+  const store = createStore(reducer, preloadedState, enhancer);
+
+  const reset = (resetReducer, resetState) => {
+    const newReducer = resetReducerCreator(resetReducer, resetState);
+    //先注册reducer
+    store.replaceReducer(newReducer);
+    //然后通过dispatch,去改变state
+    store.dispatch({type: RESET_ACTION_TYPE, state: resetState});
+  };
+
+  return {
+    ...store,
+    reset
+  };
+};
+
+export default reset;
+
+```
