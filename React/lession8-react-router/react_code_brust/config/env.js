@@ -6,7 +6,9 @@ const paths = require('./paths');
 
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
-
+/**
+ * node运行时会读取环境变量,确认是开发环境还是生产环境
+ */
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {
   throw new Error(
