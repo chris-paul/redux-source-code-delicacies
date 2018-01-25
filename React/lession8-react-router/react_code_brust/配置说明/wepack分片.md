@@ -41,4 +41,31 @@
 + common.js --------------公共模块
 + bundle.js----------------入口文件,必须,有启动代码必要的部分
 + home.chunk.js-----------home组件
-    
+
+### 代码的分片所带来的严重问题是
++ 每一个文件的reducer都都属于一个文件,但是reducer文件之间的数据交互成为了一个难题,以后有时间再去深究
+
++ 在一般的应用中,比较实际一点的做法是对每一个html页面作为一个单页应用,这样就避免了代码分片所带来的复杂性,也比较符合实际,在PC端完全不存在首页卡顿问题,这种方式是个人认为最好的实践方式,但是页面之间的跳转容易引发白屏问题,日后将详解解决方案（多页之间的路由跳转）
+```javascript
+var globby = require('globby');
+var globby = require('globby');
+var files = globby.sync(['**/pages/*'], { cwd: cwd + '/src' });
+var entry = {
+  // vendor: []
+};
+files.forEach((item) => {
+  entry[item + '/index'] = ['./src/' + item + '/index.js'];
+});
+var config = {
+  context: cwd,
+  entry,
+  output: {
+    path: 'web/build',
+    publicPath: 'web/build',
+    filename: '[name].js',
+    chunkFilename: '[chunkhash].js'
+  },
+  ......
+  ......
+  }
+```
