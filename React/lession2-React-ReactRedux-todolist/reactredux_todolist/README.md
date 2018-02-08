@@ -72,7 +72,7 @@ const reducer = combineReducers({
  compose可以帮助我们组合任意个（包括0个）高阶函数，例如compose(a,b,c)返回一个新的函数d，函数d依然接受一个函数作为入参，只不过在内部会依次调用c,b,a，从表现层对使用者保持透明。
 
 
-###  react性能分析 reactPerf
+###  六、react性能分析 reactPerf
  
   + 首先下载google插件reactperf,截至目前react的最新版是16,但是reactPerf最多支持15,所以我们降低了react的版本
   
