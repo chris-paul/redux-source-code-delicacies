@@ -54,7 +54,9 @@ constructor (props, context) {
 }
 
 getOwnState() { 
-	return { value: this.context.store.getState () [this. props . caption]};
+	return {
+		value: this.context.store.getState () [this. props . caption]
+	};
 }
 
 ```
