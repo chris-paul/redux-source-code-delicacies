@@ -63,8 +63,8 @@
 
   ### 项目的打包和运行
 
-        npm run build
-        //根据提示
+      npm run build
+      //根据提示
       npm install -g pushstate-server
       pushstate-server build
       start http://localhost:9000
