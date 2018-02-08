@@ -1,4 +1,4 @@
-### 安装flux
+### 安装redux
 		npm install --save redux
 
 ### 比较redux和flux的不同之处
