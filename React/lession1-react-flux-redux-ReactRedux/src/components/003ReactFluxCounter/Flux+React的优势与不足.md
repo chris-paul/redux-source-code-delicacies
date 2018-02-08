@@ -1,5 +1,5 @@
 ### 安装flux
-		npm install --save flux
+npm install --save flux
 		
 ### Flux优势
 
