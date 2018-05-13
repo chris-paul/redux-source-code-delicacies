@@ -36,12 +36,21 @@ class Counter extends Component {
     console.log('enter componentDidMount ' + this.props.caption);
   }
 
+  
   onClickIncrementButton() {
-    this.setState({count: this.state.count + 1});
+    this.updateCount(true);
   }
 
   onClickDecrementButton() {
-    this.setState({count: this.state.count - 1});
+    this.updateCount(false);
+  }
+
+  updateCount(isIncrement) {
+    const previousValue = this.state.count;
+    const newValue = isIncrement ? previousValue + 1 : previousValue - 1;
+
+    this.setState({count: newValue})
+    this.props.onUpdate(newValue, previousValue)
   }
 
   shouldComponentUpdate(nextProps, nextState) {

@@ -14,7 +14,7 @@
 
 + React的特点
 
-    + 不同于通过模型操作数据，react通过数据操作模型(UI = render(data))
+    + 不同于通过模型操作数据，react通过数据操作模型(UI = render(data)),render是一个承纯函数,所谓的纯函数就是输出完全依赖于输入,相同的输入绝对能得到相同的输出
     
     + Virtual DOM(虚拟DOM从没有说自己有多快,比jquery有多好，只是随着项目的复杂程度，react的渲染性能更高),虚拟DOM在后面会介绍
 

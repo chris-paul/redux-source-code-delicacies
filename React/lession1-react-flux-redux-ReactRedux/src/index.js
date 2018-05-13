@@ -14,7 +14,7 @@ ReactDOM.render(
 */
 /*
 import加载commonJS模块默认转换为default,
-ES6加载模块默认是静态加载，是同步的，传递的是引用（会在文件加载提升）
+ES6加载模块默认是静态加载，是同步的，传递的是引用（会在文件加载提升）,不会执行所引用的文件
 CommonJS是默认运行时候加载，用到了才会加载，传递的是引用的复制
 */
 
@@ -27,7 +27,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 
-import ControlPanel from './components/006ReactReduxCounter/views/ControlPanel';
+import ControlPanel from './components/002NativeReactCounter/ControlPanel';
 import store from './components/006ReactReduxCounter/Store.js';
 
 import './index.css';
