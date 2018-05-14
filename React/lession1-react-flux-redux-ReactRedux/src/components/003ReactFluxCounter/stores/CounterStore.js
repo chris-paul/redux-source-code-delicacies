@@ -18,7 +18,7 @@ const counterValues = {
 };
 
 /**
- * 定义store的一些方法，用来一起View的改变(以事件的形式)
+ * 定义store的一些方法，用来引起View的改变(以事件的形式)
  * @param  {[type]} )                     []
  * @param  {[type]} emitChange:           [可以广播一个特定的事件]
  * @param  {[type]} addChangeListener:    [添加事件]
