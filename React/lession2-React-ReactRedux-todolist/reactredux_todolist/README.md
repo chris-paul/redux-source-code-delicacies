@@ -90,12 +90,87 @@ const reducer = combineReducers({
      todos: todoReducer,
      filter: filterReducer
    });
-
    const middlewares = [];
    const storeEnhancers = compose(
      applyMiddleware(...middlewares),
      (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
    );
-
    export default createStore(reducer, {}, storeEnhancers);
   ```
+
+ ### 七、理解 combindReducer
+ + createStore只能接受一个reducer,所以我们必须将多个reducer合并为一个
+ ```javascript
+  /**
+  * 
+  * 检验reducer函数的合法性,因为state[key]返回undefiend,所以initalState的初始值不能是undefined
+  * 不然就永远无法为state设置key
+  *
+  * @version  [version]
+  * @param    {[type]}   reducers [description]
+  * @return   {[type]}            [description]
+  */
+  function assertReducerSanity(reducers) {  
+    Object.keys(reducers).forEach(key => {  
+        var reducer = reducers[key]  
+        var initialState = reducer(undefined, { type: ActionTypes.INIT })  
+        if (typeof initialState === 'undefined') {  
+            throw new Error(  
+            `Reducer "${key}" returned undefined during initialization. ` +  
+            `If the state passed to the reducer is undefined, you must ` +  
+            `explicitly return the initial state. The initial state may ` +  
+            `not be undefined.`  
+        )  
+    }  
+    //检验随机的一个type是否会返回undefined。
+    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.')  
+      if (typeof reducer(undefined, { type }) === 'undefined') {  
+        throw new Error(  
+          `Reducer "${key}" returned undefined when probed with a random type. ` +  
+          `Don't try to handle ${ActionTypes.INIT} or other actions in "redux/*" ` +  
+          `namespace. They are considered private. Instead, you must return the ` +  
+          `current state for any unknown actions, unless it is undefined, ` +  
+          `in which case you must return the initial state, regardless of the ` +  
+          `action type. The initial state may not be undefined.`  
+        )  
+      }  
+    })  
+}  
+ export default function combindReducer(reducers) {
+    // 第一个只是先过滤一遍 把非function的reducer过滤掉
+  const reducerKeys = Object.keys(reducers)
+  const finalReducers = {}
+  reducerKeys.forEach((key) => {
+      if(typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key]
+      } 
+  })
+  //检验reducer的合法性
+  try {  
+    assertReducerSanity(finalReducers)  
+  } catch (e) {  
+    sanityError = e  
+  }  
+  const finalReducersKeys = Object.keys(finalReducers)
+    // 第二步比较重要 就是将所有reducer合在一起
+    // 根据key调用每个reducer，将他们的值合并在一起
+    let hasChange = false;
+    const nextState = {};
+    /**
+     * 该开始的时候createStore dispatch({ type: ActionTypes.INIT })初始化数据,state一般是一个对象
+     * 或者是字符串,所以state[key]肯定是undefined,所以assertReducerSanity必须队initstate做出校验 
+     * @param    {Object}   state  [唯一数据源]
+     * @param    {[type]}   action [action纯函数]
+     * @return   {[type]}          [description]
+     */
+    return function combind(state={}, action) {
+        finalReducersKeys.forEach((key) => {
+            const previousValue = state[key];
+            const nextValue = reducers[key](previousValue, action);
+            nextState[key] = nextValue;
+            hasChange = hasChange || previousValue !== nextValue
+        })
+        return hasChange ? nextState : state;
+    }
+}
+ ``` 
