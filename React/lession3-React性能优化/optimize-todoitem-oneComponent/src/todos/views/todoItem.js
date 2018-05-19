@@ -14,10 +14,10 @@ class TodoItem extends React.Component {
     //每次产生的函数引用都不相同
     console.log(nextProsp.onToggle === this.props.onToggle)
   }
-  shouldComponentUpdate(){
+ /* shouldComponentUpdate(){
     console.log("是否更新")
     return true;
-  }
+  }*/
   render() {
     const {onToggle, onRemove, completed, text } = this.props;
 
