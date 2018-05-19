@@ -24,7 +24,8 @@ class AddTodo extends Component {
     input.value = '';
   }
   /**
-   * react在render的时候,如果发现使用了ref属性,会立即执行这个函数
+   * react在render的时候,如果发现使用了ref属性,会立即执行这个函数,
+   * 这个ref返回的是DOM节点,而不是virtual DOM 节点
    * @Author   LHK
    * @DateTime 2017-12-26
    * @param    {[type]}   node [description]

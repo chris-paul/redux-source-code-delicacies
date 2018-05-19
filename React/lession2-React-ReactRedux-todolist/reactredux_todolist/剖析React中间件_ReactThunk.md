@@ -15,6 +15,8 @@ export default createStoreWithMdware;
 let store = createStoreWithMiddleware(rootReducer, initialState);  
 ```
 + 理解applyMiddleware和compose
++ applyMiddleware作为一个store enhancer,去加强createStore,赋予他更多的功能,可以去处理中间件,所以这个
+applyMiddleware是使用中间件必须的加载的函数
 ``` javascript
 import compose from './compose'
 export default function applyMiddleware(...middlewares) {
@@ -23,13 +25,16 @@ export default function applyMiddleware(...middlewares) {
     var store = createStore(reducer, initialState, enhancer)
     var dispatch = store.dispatch
     var chain = []
+    /*
+    * 我们用 applyMiddleware 是为了改造 dispatch 的，所以 applyMiddleware 执行完后，dispatch 是变化了的，而 middlewareAPI 是 applyMiddleware 执行中分发到各个 middleware，所以必须用匿名函数包裹 dispatch， 这样只要 dispatch 更新了， middlewareAPI 中的 dispatch 应用也会发生变化
+     */
     var middlewareAPI = {
       getState: store.getState,
       dispatch: (action) => dispatch(action)
     }
     //将每一个store用中间件进行处理,得到的结果存储到数组中
     chain = middlewares.map(middleware => middleware(middlewareAPI))
-    //处理得到不i一样的dispatch
+    //处理得到不一样的dispatch
     dispatch = compose(...chain)(store.dispatch)
     return {
       ...store,

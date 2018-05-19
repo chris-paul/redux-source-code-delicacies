@@ -32,6 +32,42 @@ export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
      })
  )(TodoList);   
 ```
+    + 源码解析
+```javascript
+    function bindActionCreator(actionCreator, dispatch) {
+      return (...args) => dispatch(actionCreator(...args))
+    }
+    export default function bindActionCreators(actionCreators, dispatch) {
+      if (typeof actionCreators === 'function') {
+        return bindActionCreator(actionCreators, dispatch)
+      }
+      /*容错判断不能为空并且必须是object*/
+      if (typeof actionCreators !== 'object' || actionCreators === null) {
+        throw new Error(
+          `bindActionCreators expected an object or a function, instead received ${actionCreators === null ? 'null' : typeof actionCreators}. ` +
+          `Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?`
+        )
+      }
+        //获取keys
+      var keys = Object.keys(actionCreators)
+     
+      var boundActionCreators = {}
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i]
+        var actionCreator = actionCreators[key]
+        //得到我们的actionCreator方法
+        if (typeof actionCreator === 'function') {
+          boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+        }
+        //boundActionCreators["removeTodo"]=function(){}
+        //boundActionCreators["addTodo"]=function(){}
+        //所以，返回的内容很简单，就是把我们自己的函数包装一下，返回一个新的函数
+        //当你调用这个新的函数的时候，新函数会直接dispatch我们的旧函数调用的值
+        //同时将新函数的参数也传递给旧函数
+      }
+      return boundActionCreators
+    }
+```    
 ### 三、理解combineReducers
 
   + 一个项目分为了很多组件,所以我们一个项目一个reducer简直就是一个痛苦,所以combineReducers方法用来将多个reducer合成一个reducer,通过对reducer键值对的形式指定,此时也可以取得不同 组件之间的store,比如state.todos 
@@ -41,65 +77,7 @@ const reducer = combineReducers({
   filter: filterReducer
 });
 ```
-
-### 四、理解applyMiddleware   
-
-    这个有点复杂,有一篇单独的分析
-
-### 五、理解React 高阶函数compose
-  
-+ 什么是高阶组件和高阶函数
-
- 接收函数作为输入，或者输出另一个函数的一类函数，被称作高阶函数。对于高阶组件，它描述的便是接受React组件作为输入，输出一个新的React组件的组件。
-
-    + createStore的第三个参数,传入高阶函数增强createStore
-```javascript
-/*下面是createStore的部分源码,*/     
-  export default function createStore(reducer, preloadedState, enhancer) {
-  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = preloadedState
-    preloadedState = undefined
-  }
-  if (typeof enhancer !== 'undefined') {
-    if (typeof enhancer !== 'function') {
-      throw new Error('Expected the enhancer to be a function.')
-    }
-    //可以看到enhancer增强createStore
-    return enhancer(createStore)(reducer, preloadedState)
-  }
-```      
-  + compose
- compose可以帮助我们组合任意个（包括0个）高阶函数，例如compose(a,b,c)返回一个新的函数d，函数d依然接受一个函数作为入参，只不过在内部会依次调用c,b,a，从表现层对使用者保持透明。
-
-
-###  六、react性能分析 reactPerf
- 
-  + 首先下载google插件reactperf,截至目前react的最新版是16,但是reactPerf最多支持15,所以我们降低了react的版本
-  
-   cnpm install react-addons-perf
-
-  + react-addons-perf     
-  ```javascript
-  import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
-  import {reducer as todoReducer} from './todos';
-  import {reducer as filterReducer} from './filter';
-   import Perf from 'react-addons-perf';
-   const win = window;
-   win.Perf = Perf
-   const reducer = combineReducers({
-     todos: todoReducer,
-     filter: filterReducer
-   });
-   const middlewares = [];
-   const storeEnhancers = compose(
-     applyMiddleware(...middlewares),
-     (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
-   );
-   export default createStore(reducer, {}, storeEnhancers);
-  ```
-
- ### 七、理解 combindReducer
- + createStore只能接受一个reducer,所以我们必须将多个reducer合并为一个
+     + createStore只能接受一个reducer,所以我们必须将多个reducer合并为一个
  ```javascript
   /**
   * 
@@ -174,3 +152,60 @@ const reducer = combineReducers({
     }
 }
  ``` 
+
+
+### 四、理解applyMiddleware   
+
+    这个有点复杂,有一篇单独的分析
+
+### 五、理解React 高阶函数compose
+  
++ 什么是高阶组件和高阶函数
+
+ 接收函数作为输入，或者输出另一个函数的一类函数，被称作高阶函数。对于高阶组件，它描述的便是接受React组件作为输入，输出一个新的React组件的组件。
+
+    + createStore的第三个参数,传入高阶函数增强createStore
+```javascript
+/*下面是createStore的部分源码,*/     
+  export default function createStore(reducer, preloadedState, enhancer) {
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState
+    preloadedState = undefined
+  }
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.')
+    }
+    //可以看到enhancer增强createStore
+    return enhancer(createStore)(reducer, preloadedState)
+  }
+```      
+  + compose
+ compose可以帮助我们组合任意个（包括0个）高阶函数，例如compose(a,b,c)返回一个新的函数d，函数d依然接受一个函数作为入参，只不过在内部会依次调用c,b,a，从表现层对使用者保持透明。
+
+
+###  六、react性能分析 reactPerf(compose加载多个中间件)applyMiddleware和devToolsExtension)
+  + 首先下载google插件reactperf,截至目前react的最新版是16,但是reactPerf最多支持15,所以我们降低了react的版本
+  
+   cnpm install react-addons-perf
+
+  + react-addons-perf     
+  ```javascript
+  import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+  import {reducer as todoReducer} from './todos';
+  import {reducer as filterReducer} from './filter';
+   import Perf from 'react-addons-perf';
+   const win = window;
+   win.Perf = Perf
+   const reducer = combineReducers({
+     todos: todoReducer,
+     filter: filterReducer
+   });
+   const middlewares = [];
+   const storeEnhancers = compose(
+     applyMiddleware(...middlewares),
+     (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
+   );
+   export default createStore(reducer, {}, storeEnhancers);
+  ```
+
