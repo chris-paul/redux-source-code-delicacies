@@ -25,7 +25,6 @@ function connect(mapStateToProps=doNothing, mapDispatchToProps=doNothing) {
         this.store = {};
       }
 
-      /*
       //TODO: make a workable shouldComponentUpdate
       shouldComponentUpdate(nextProps, nextState) {
         for (const propType in nextProps) {
@@ -44,7 +43,6 @@ function connect(mapStateToProps=doNothing, mapDispatchToProps=doNothing) {
         }
         return false;
       }
-      */
 
       componentDidMount() {
         this.context.store.subscribe(this.onChange);

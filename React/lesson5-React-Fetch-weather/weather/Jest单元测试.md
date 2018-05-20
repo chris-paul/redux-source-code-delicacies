@@ -95,6 +95,8 @@ mock.restore();
 ```
 ###  redux-mock-store
 异步action的时候,检测action是否派发(因为我们并不需要真正的派发到reducer中), 这个库主要是产生一个模拟的redux-store,但是并没有真正的dispatch,例子在weather/test
+### view组件的测试
++ 对于view组件的测试还是需要去创建一个真实的store去查看应有的渲染
 ####  React的测试主要分为以下几个方面
 + 组件测试查看组件是否渲染
 + reducer测试
