@@ -210,4 +210,4 @@ const reducer = combineReducers({
   ```
 
 ### storeEnhancers的使用--reset增强器
-  + 请看resetEnhancers.md
+  + 请看  resetEnhancers.md
