@@ -209,3 +209,5 @@ const reducer = combineReducers({
    export default createStore(reducer, {}, storeEnhancers);
   ```
 
+### storeEnhancers的使用--reset增强器
+  + 请看resetEnhancers.md
