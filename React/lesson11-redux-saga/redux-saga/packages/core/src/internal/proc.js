@@ -170,6 +170,22 @@ function createTaskIterator({ context, fn, args }) {
       )
 }
 
+/**
+ * 生成事件订阅通道，用于存放回调函数
+ * 执行一次Generator对象iterator的next，根据结果执行对应类型的effect
+ * @version  [version]
+ * @param    {[type]}   iterator       [rootSgag的generator对象]
+ * @param    {[type]}   stdChannel     [事件订阅通道]
+ * @param    {[type]}   dispatch       [redux的dispatch函数]
+ * @param    {[type]}   getState       [redux的所有的State]
+ * @param    {Object}   parentContext  [上下文环境,一般是{}]
+ * @param    {Object}   options        [sagaMonitor等监控函数]
+ * @param    {Number}   parentEffectId [main任务的effectId,也就是1]
+ * @param    {[type]}   meta           [rootsaga函数的一些信息]
+ * @param    {[type]}   cont           [description]
+ * @param    {[type]}                  [description]
+ * @return   {[type]}                  [description]
+ */
 export default function proc(
   iterator,
   stdChannel,
@@ -190,10 +206,10 @@ export default function proc(
       log('error', err.sagaStack)
     }
   }
-
+  //创建任务执行的上下文,也就是一个对象(https://blog.csdn.net/blueblueskyhua/article/details/73135938)
   const taskContext = Object.create(parentContext)
 
-  let crashedEffect = null
+  let crashedEffect = null  //effect失败
   const cancelledDueToErrorTasks = []
   /**
     Tracks the current effect cancellation
@@ -207,6 +223,7 @@ export default function proc(
     to track the main flow (besides other forked tasks)
   **/
   const task = newTask(parentEffectId, meta, iterator, cont)
+  //mainTask信息,主要是函数信息,isRunning,取消监控的函数
   const mainTask = { meta, cancel: cancelMain, isRunning: true }
 
   const taskQueue = forkQueue(
@@ -220,6 +237,9 @@ export default function proc(
   /**
     cancellation of the main task. We'll simply resume the Generator with a Cancel
   **/
+  /*
+  * 取消mainTask的监控 
+   */
   function cancelMain() {
     if (mainTask.isRunning && !mainTask.isCancelled) {
       mainTask.isCancelled = true
@@ -270,6 +290,13 @@ export default function proc(
     It's a recursive async/continuation function which calls itself
     until the generator terminates or throws
   **/
+  /*
+  * 这是一个generator的驱动器,他会执行rootSaga函数直到结束
+  * 以generator形式组织逻辑序列（function\* + yield），把一系列的串行/并行操作通过yield拆分开
+  * 利用iterator的可“暂停/恢复”特性（iter.next()）分步执行
+  * 通过iterator影响内部状态（iter.next(result)），注入异步操作结果
+  * 利用iterator的错误捕获特性（iter.throw(error)），注入异步操作异常
+   */
   function next(arg, isErr) {
     // Preventive measure. If we end up here, then there is really something wrong
     if (!mainTask.isRunning) {
@@ -400,7 +427,13 @@ export default function proc(
       : /* anything else returned as is */        currCb(effect)
     )
   }
-
+  /**
+   * @param    {[type]}   effect         [上一次effect的结果]
+   * @param    {[type]}   parentEffectId [parentEffectId就是上一个task的id]
+   * @param    {String}   label          [description]
+   * @param    {Function} cb             [next函数,可以继续mainTask的操作]
+   * @return   {[type]}                  [description]
+   */
   function digestEffect(effect, parentEffectId, label = '', cb) {
     const effectId = nextEffectId()
     sagaMonitor && sagaMonitor.effectTriggered({ effectId, parentEffectId, label, effect })

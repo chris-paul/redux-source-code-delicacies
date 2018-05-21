@@ -53,7 +53,8 @@ export default function sagaMiddlewareFactory({ context = {}, ...options } = {})
       onError,
       effectMiddlewares,
     })
-
+    /*遵循redux中间件的规则,返回的函数实际上是队dispatch的重写,请看lesson2applyMiddleware
+    和compose源码*/
     return next => action => {
       if (sagaMonitor && sagaMonitor.actionDispatched) {
         sagaMonitor.actionDispatched(action)
