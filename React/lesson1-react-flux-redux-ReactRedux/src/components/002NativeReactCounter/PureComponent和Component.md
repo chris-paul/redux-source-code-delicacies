@@ -16,7 +16,7 @@
     }
 
     //等同于
-    class Counter extends Pu，eComponent {
+    class Counter extends PureComponent {
         ...
         ...
     }
@@ -98,5 +98,3 @@
       return true
     }
     ```
-
-    
