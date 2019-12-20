@@ -8,7 +8,7 @@
   "dependencies": {
     "humps": "^0.6.0",
     "isomorphic-fetch": "^2.2.0",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.15",
     "normalizr": "^1.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
